@@ -1,0 +1,112 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style type="text/css">
+        .container{
+            margin-top:20px
+        }
+        .btn-light{
+            margin: 10px 0px;
+        }
+        /* #section {
+            border: 1px gray solid;
+            margin: 5px;
+            padding: 20px;
+        } */
+        table.table-striped{
+            border: 1px gray solid;
+        }
+        span{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Money App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <span class="navbar-text">
+                <% if current_lender_user %>
+                    <form action="/sessions/destroy/lender" method="post">
+                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                        <input type="hidden" name="_method" value="delete">
+                        <button type="submit" class="btn btn-light" value="Log Out">Log Out</button>
+                    </form>
+                <% end %>
+            </span>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md" id="section">
+                <h1>Name: <%= current_lender_user.first_name %> <%= current_lender_user.last_name %></h1>
+                <h4>Account Balance: $<%= current_lender_user.money %></h4>
+                <br>
+                <h4>List of People Who Are in Need of Help</h4>
+                <span><%= flash[:errors] %></span>
+                <br>
+                <table class="table table-striped">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Needed Money For</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Amount Needed</th>
+                            <th scope="col">Amount Raised</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @borrowers.each do |borrower| %>
+                            <tr>
+                                <td><%= borrower.first_name %> <%= borrower.last_name %></td>
+                                <td><%= borrower.need_money_for %></td>
+                                <td><%= borrower.description %></td>
+                                <td><%= borrower.amount_needed %></td>
+                                <td><%= borrower.amount_raised %></td>
+                                <td>
+                                <% if current_lender_user.money != 0 %>
+                                    <form action="/loans/<%= borrower.id %>" method="post">
+                                        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                                        <input type="text" name="loan[amount]" id="Amount">
+                                        <button type="submit" class="btn btn-light" id="join_btn" value="Lend">Lend</button>
+                                    </form>
+                                <% end %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+                <br>
+                <h4>List of People You Lent Money To</h4>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Needed Money For</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Amount Needed</th>
+                            <th scope="col">Amount Raised</th>
+                            <th scope="col">Amount Lent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @borrowers_lended.uniq.each do |borrower| %>
+                            <tr>
+                                <td><%= borrower.first_name %> <%= borrower.last_name %></td>
+                                <td><%= borrower.need_money_for %></td>
+                                <td><%= borrower.description %></td>
+                                <td><%= borrower.amount_needed %></td>
+                                <td><%= borrower.amount_raised %></td>
+                                <td>$<%= Loan.where(borrower: borrower, lender: current_lender_user).sum(:amount) %></td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>

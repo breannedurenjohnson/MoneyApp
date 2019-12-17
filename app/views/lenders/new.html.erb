@@ -1,0 +1,100 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style type="text/css">
+        .container{
+            margin-top:20px
+        }
+        .btn-light{
+            margin: 10px 0px;
+        }
+        #section {
+            border: 1px gray solid;
+            margin: 5px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Money App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md" id="section">
+                <h4>Lenders</h4>
+                <form action="/lenders/new" method="post">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <div class="form-group row">
+                        <label for="First Name" class="col-sm-4 col-form-label">First Name</label>
+                        <input type="text" name="lender[first_name]" id="First Name">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Last Name" class="col-sm-4 col-form-label">Last Name</label>
+                        <input type="text" name="lender[last_name]" id="Last Name">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Email" class="col-sm-4 col-form-label">Email</label>                    
+                        <input type="text" name="lender[email]" id="Email">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password" class="col-sm-4 col-form-label">Password</label>                     
+                        <input type="password" name="lender[password]" id="Password">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password_Confirmation" class="col-sm-4 col-form-label">Money</label>                     
+                        <input type="text" name="lender[money]" id="Money">
+                    </div>
+                    <button type="submit" class="btn btn-light" value="Register">Register</button>
+                </form>
+            <a href="/login">Already a member?</a>
+            </div>
+            <div class="col-sm">
+                <% if flash[:errors] %>
+                    <% flash[:errors].each do |e| %>
+                        <p><%= e %></p>
+                    <% end %>
+                <% end %>
+            </div>
+            <div class="col-md" id="section">
+                <h4>Borrowers</h4>
+                <form action="/borrowers/new" method="post">
+                    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+                    <div class="form-group row">
+                        <label for="First Name" class="col-sm-4 col-form-label">First Name</label>
+                        <input type="text" name="borrower[first_name]" id="First Name">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Last Name" class="col-sm-4 col-form-label">Last Name</label>
+                        <input type="text" name="borrower[last_name]" id="Last Name">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Email" class="col-sm-4 col-form-label">Email</label>                    
+                        <input type="text" name="borrower[email]" id="Email">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password" class="col-sm-4 col-form-label">Password</label>                     
+                        <input type="password" name="borrower[password]" id="Password">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password" class="col-sm-4 col-form-label">Need Money For</label>                     
+                        <input type="text" name="borrower[need_money_for]" id="Need Money For">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password" class="col-sm-4 col-form-label">Description</label>                     
+                        <input type="text" name="borrower[description]" id="Description">
+                    </div>
+                    <div class="form-group row">
+                        <label for="Password_Confirmation" class="col-sm-4 col-form-label">Amount Needed</label>                     
+                        <input type="text" name="borrower[amount_needed]" id="Amount Needed">
+                    </div>
+                    <input type="hidden" name="borrower[amount_raised]" value="0">
+                    <button type="submit" class="btn btn-light" value="Register">Register</button>
+                </form>
+                <a href="/login">Already a member?</a>
+            </div>
+        </div>
+    </div>
+</body>
